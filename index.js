@@ -71,9 +71,16 @@ async function run() {
 
         // Events Api 
 
-        app.get('/events', async(req, res) => {
+        app.get('/events', async (req, res) => {
             const cursor = eventsCollection.find();
             const result = await cursor.toArray();
+            res.send(result);
+        })
+
+        app.get('/events/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await eventsCollection.findOne(query)
             res.send(result);
         })
 
