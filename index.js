@@ -91,9 +91,37 @@ async function run() {
             res.send(result)
         })
 
+        app.patch('/events/:id', async (req, res) => {
+            const id = req.params.id;
+            const updatedEvent = req.body;
+
+            const query = { _id: new ObjectId(id) };
+            const update = {
+                $set: {
+                    title: updatedEvent.title,
+                    description: updatedEvent.description,
+                    type: updatedEvent.type,
+                    thumbnail: updatedEvent.thumbnail,
+                    location: updatedEvent.location,
+                    eventDate: updatedEvent.eventDate
+                }
+            }
+
+            const result = await eventsCollection.updateOne(query, update);
+            res.send(result);
+        })
+
+        app.delete('/events/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await eventsCollection.deleteOne(query);
+            res.send(result);
+        })
+
         // Join Event Api 
 
         app.get('/join-event', async (req, res) => {
+
             const cursor = joinEventCollection.find();
             const result = await cursor.toArray();
             res.send(result);
@@ -101,8 +129,19 @@ async function run() {
 
         app.post('/join-event', async (req, res) => {
             const newJoinEvent = req.body;
-            const result = await joinEventCollection.insertOne(newJoinEvent);
-            res.send(result);
+
+            const id = req.params.id
+            const query = { _id: new ObjectId(id) };
+            const existingUser = await joinEventCollection.findOne(query);
+
+            if (existingUser) {
+                res.send("Joined already exist. Do no need to Join again.")
+            }
+            else {
+                const result = await joinEventCollection.insertOne(newJoinEvent);
+                res.send(result);
+            }
+
         })
 
 
