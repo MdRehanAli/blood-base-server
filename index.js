@@ -46,7 +46,7 @@ async function run() {
 
         app.get('/users/:id', async (req, res) => {
             const id = req.params.id;
-            const query = { id: new ObjectId(id) };
+            const query = { _id: new ObjectId(id) };
             const result = await usersCollection.findOne(query)
             res.send(result);
         })
@@ -70,6 +70,13 @@ async function run() {
 
 
         // Events Api 
+
+        app.get('/events', async(req, res) => {
+            const cursor = eventsCollection.find();
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+
         app.post('/events', async (req, res) => {
             const newEvent = req.body;
             const result = await eventsCollection.insertOne(newEvent);
