@@ -118,6 +118,7 @@ async function run() {
             res.send(result);
         })
 
+
         // Join Event Api 
 
         app.get('/join-event', async (req, res) => {
@@ -144,6 +145,32 @@ async function run() {
 
         })
 
+        app.patch('/join-event/:id', async (req, res) => {
+            const id = req.params.id;
+            const updatedEvent = req.body;
+
+            const query = { _id: new ObjectId(id) };
+            const update = {
+                $set: {
+                    title: updatedEvent.title,
+                    description: updatedEvent.description,
+                    type: updatedEvent.type,
+                    thumbnail: updatedEvent.thumbnail,
+                    location: updatedEvent.location,
+                    eventDate: updatedEvent.eventDate
+                }
+            }
+
+            const result = await joinEventCollection.updateOne(query, update);
+            res.send(result);
+        })
+
+        app.delete('/join-event/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await joinEventCollection.deleteOne(query);
+            res.send(result);
+        })
 
 
         // Send a ping to confirm a successful connection
