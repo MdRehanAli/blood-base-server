@@ -31,8 +31,9 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
 
-        const db = client.db("bloodBaseDB")
-        const usersCollection = db.collection("users")
+        const db = client.db("bloodBaseDB");
+        const usersCollection = db.collection("users");
+        const eventsCollection = db.collection("events");
 
         // All Api's here 
         // Users Api
@@ -65,6 +66,14 @@ async function run() {
                 const result = await usersCollection.insertOne(newUser);
                 res.send(result);
             }
+        })
+
+
+        // Events Api 
+        app.post('/events', async (req, res) => {
+            const newEvent = req.body;
+            const result = await eventsCollection.insertOne(newEvent);
+            res.send(result)
         })
 
 
