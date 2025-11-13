@@ -34,6 +34,7 @@ async function run() {
         const db = client.db("bloodBaseDB");
         const usersCollection = db.collection("users");
         const eventsCollection = db.collection("events");
+        const joinEventCollection = db.collection("joinEvent")
 
         // All Api's here 
         // Users Api
@@ -88,6 +89,20 @@ async function run() {
             const newEvent = req.body;
             const result = await eventsCollection.insertOne(newEvent);
             res.send(result)
+        })
+
+        // Join Event Api 
+
+        app.get('/join-event', async (req, res) => {
+            const cursor = joinEventCollection.find();
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+
+        app.post('/join-event', async (req, res) => {
+            const newJoinEvent = req.body;
+            const result = await joinEventCollection.insertOne(newJoinEvent);
+            res.send(result);
         })
 
 
