@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
+        // await client.connect();
 
         const db = client.db("bloodBaseDB");
         const usersCollection = db.collection("users");
@@ -50,6 +50,13 @@ async function run() {
             const query = { _id: new ObjectId(id) };
             const result = await usersCollection.findOne(query)
             res.send(result);
+        })
+
+        app.get('/users/:email/role', async (req, res) => {
+            const email = req.params.email;
+            const query = { email };
+            const user = await usersCollection.findOne(query);
+            res.send({ role: user?.role || 'user' })
         })
 
         app.post('/users', async (req, res) => {
