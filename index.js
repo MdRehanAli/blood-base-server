@@ -62,6 +62,9 @@ async function run() {
         app.post('/users', async (req, res) => {
             const newUser = req.body;
 
+            newUser.status = 'pending';
+            newUser.createdAt = new Date();
+
             console.log(newUser);
 
             const query = { email: newUser.email };
