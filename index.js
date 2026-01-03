@@ -63,6 +63,7 @@ async function run() {
             const newUser = req.body;
 
             newUser.status = 'pending';
+            newUser.role = 'user';
             newUser.createdAt = new Date();
 
             console.log(newUser);
@@ -77,6 +78,22 @@ async function run() {
                 const result = await usersCollection.insertOne(newUser);
                 res.send(result);
             }
+        })
+
+        app.patch('/users/:id/role', async (req, res) => {
+            const id = req.params.id;
+            const roleInfo = req.body
+            const query = { _id: new ObjectId(id) };
+
+            const updateDoc = {
+                $set: {
+                    role: roleInfo.role
+                }
+            }
+
+            const result = await usersCollection.updateOne(query, updateDoc);
+
+            res.send(result);
         })
 
 
