@@ -63,7 +63,6 @@ async function run() {
             const newUser = req.body;
 
             newUser.status = 'pending';
-            newUser.role = 'user';
             newUser.createdAt = new Date();
 
             console.log(newUser);
